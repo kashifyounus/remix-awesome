@@ -1,4 +1,6 @@
 import type { MetaFunction } from "@remix-run/node";
+import { Link } from "@remix-run/react";
+import { Button } from "~/components/ui/button";
 
 export const meta: MetaFunction = () => {
   return [
@@ -15,6 +17,7 @@ export default function Index() {
           <h1 className="leading text-2xl font-bold text-gray-800 dark:text-gray-100">
             Welcome to <span className="sr-only">Remix</span>
           </h1>
+
           <div className="h-[144px] w-[434px]">
             <img
               src="/logo-light.png"
@@ -33,6 +36,14 @@ export default function Index() {
             What&apos;s next?
           </p>
           <ul>
+            <li>
+              <Link
+                to="/login"
+                className="text-blue-700 hover:underline dark:text-blue-500"
+              >
+                Login
+              </Link>
+            </li>
             {resources.map(({ href, text, icon }) => (
               <li key={href}>
                 <a
