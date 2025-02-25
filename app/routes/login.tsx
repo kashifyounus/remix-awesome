@@ -1,5 +1,5 @@
 import { LoginForm } from "@/components/auth/login-form";
-import { ActionFunction } from "@remix-run/node";
+import { ActionFunction, LoaderFunction, redirect } from "@remix-run/node";
 import { useActionData } from "@remix-run/react";
 import { useEffect } from "react";
 import { auth, sessionStorage } from "~/auth/auth.server";
@@ -16,6 +16,11 @@ export const action: ActionFunction = async ({ request }) => {
       request.headers.get("Cookie")
     );
     const user = await auth.authenticate("user-pass", request);
+    /// check if user session is already set
+    if (session.has("user")) {
+      console.log("User already authenticated");
+      throw new Error("User already authenticated");
+    }
     session.set("user", user);
     return new Response(null, {
       status: 302,
@@ -31,6 +36,15 @@ export const action: ActionFunction = async ({ request }) => {
     }
   }
 };
+
+export const loader: LoaderFunction = async ({ request }) => {
+  const session = await sessionStorage.getSession(request.headers.get("cookie"));
+  const user = session.get("user");
+  if (!user) return null;
+  return redirect("/dashboard");
+};
+
+
 export default function LoginPage() {
   const actionData = useActionData<LoginActionData>();
   const { toast } = useToast();

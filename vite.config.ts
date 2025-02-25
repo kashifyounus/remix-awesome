@@ -15,6 +15,8 @@ export default defineConfig({
       routes(defineRoutes) {
         return flatRoutes("routes", defineRoutes, {
           ignoredRouteFiles: ["**/.*"],
+           nestedDirectoryChar: '+',
+           paramPrefixChar: '$'
         });
       },
       future: {
